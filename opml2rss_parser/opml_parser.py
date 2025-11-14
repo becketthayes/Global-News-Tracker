@@ -2,10 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
 
+# GitHub HTML-rendered README (not raw markdown)
 RAW_README_URL = "https://github.com/spians/awesome-RSS-feeds?tab=readme-ov-file"
 
-
-# Download the README of github with opml for all countries
 def fetch_readme():
     print("Fetching README.md html from GitHub...")
     response = requests.get(RAW_README_URL)
@@ -63,13 +62,15 @@ def get_opml_table(opml_html):
 
     return countries_rss
 
-
-def main():
+def get_countries_with_opml():
     readme = fetch_readme()
     opml_html = get_opml_html(readme)
-    table = get_opml_table(opml_html)
+    return get_opml_table(opml_html)
 
+def main():
+    table = get_countries_with_opml()
     pprint(table)
+
     print("\nWith Category vs Without Category:")
     print("• 'With Category' OPML wraps feeds inside extra <outline> tags so RSS readers can import them grouped by category.")
     print("• 'Without Category' OPML contains the same feeds but in a flat structure for readers that do NOT support category groupings.\n")
