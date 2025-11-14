@@ -20,7 +20,7 @@ Features of our fully automated pipeline:
 
 ## Data Sources
 
-### RSS Feeds
+### RSS Feeds - Fetched from various top News sources across the World
 Some example feeds:
 - BBC: `http://feeds.bbci.co.uk/news/world/rss.xml`  
 - Xinhua: `http://www.xinhuanet.com/english/rss/worldrss.xml`  
@@ -51,6 +51,6 @@ Some example feeds:
 - `key_topics`: topic, latitude, longitude, articleCount, createdAt, related article URLs  
 - `articles`: title, source, url, content, publishedAt, topic_id (FK)
 
-**Hosting Options:** Neon, Supabase, or Ghost host  
+**Hosting Options:** Neon, [Supabase](https://supabase.com/docs/reference/python/insert), or Ghost host  
 
 
