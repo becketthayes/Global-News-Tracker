@@ -25,4 +25,4 @@ dict_articles = dict()
 for url in urls:
     dict_articles[url] = parse_url(url, time_limit, verbose=False)
 
-# pprint(dict_articles)
+pprint(dict_articles[""])

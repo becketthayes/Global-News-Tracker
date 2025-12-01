@@ -4,5 +4,7 @@
         "https://feeds.nbcnews.com/nbcnews/public/news",
         "https://www.theguardian.com/world/rss",
         "https://abcnews.go.com/abcnews/internationalheadlines",
-        "https://www.cbc.ca/webfeed/rss/rss-world"
+        "https://www.cbc.ca/webfeed/rss/rss-world",
+        "https://africa.com/feed/",
+        "https://newafricanmagazine.com/feed/"
 ]
