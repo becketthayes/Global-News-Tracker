@@ -6,8 +6,10 @@ from rss_parser import parse_url
 from opml2rss_parser.opml_to_rss import get_all_rss
 from nlp import cluster_articles
 import random
+import utils
+import concurrent.futures
 
-socket.setdefaulttimeout(3)
+socket.setdefaulttimeout(5)
 
 current_time = datetime.now(timezone.utc)
 time_limit = current_time - timedelta(hours=12)
@@ -26,19 +28,15 @@ for url in urls:
     dict_articles[url] = parse_url(url, time_limit, verbose=False)
     i += 1
 
-count = 0
-count_non_empty = 0
-for key, value in dict_articles.items():
-    count += len(value)
-    if value:
-        count_non_empty += 1
-        print(key)
-print(count_non_empty)
-print(count)
+articles_flattened = [article for feeds in dict_articles.values() for article in feeds]
+random.shuffle(articles_flattened)
 
-articles_for_nlp = [article for feeds in dict_articles.values() for article in feeds]
+print(f"Start parallel scraping for {len(articles_flattened)} articles!")
 
-clustered_articles = cluster_articles(articles_for_nlp)
+with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    list(executor.map(utils.scrape_article, articles_flattened))
+
+clustered_articles = cluster_articles(articles_flattened)
 
 # 2. INSPECT the results
 # Group articles by their new 'cluster_id' to see the trends
@@ -61,3 +59,5 @@ for cluster_id, articles in sorted_trends:
     # Print the first 3 headlines in this trend
     for a in articles[:3]:
         print(f"  - {a['title']}")
+
+utils.save_articles_to_json(clustered_articles)

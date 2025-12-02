@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from newspaper import Article
+from newspaper import Article, Config
 import json
 
 def scrape_articles(url):
@@ -49,8 +49,12 @@ def scrape_articles(url):
 def scrape_single_url(url):
     article_data = {}
 
+    config = Config() 
+
+    config.browser_user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+
     try:
-        article = Article(url)
+        article = Article(url, config=config)
         article.download()
         article.parse()
 

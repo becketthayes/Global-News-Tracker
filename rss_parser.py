@@ -1,7 +1,6 @@
 import feedparser
 import time
 from datetime import datetime, timedelta, timezone
-from scraper import scrape_single_url
 from langdetect import detect, LangDetectException
 
 def parse_url(url, time_limit, verbose=False):
@@ -39,17 +38,11 @@ def parse_url(url, time_limit, verbose=False):
         if published_time >= time_limit:
             link = entry.get("link", "")
 
-            if link:
-                html_content = scrape_single_url(link)
-            else:
-                html_content = "No HTML content"
-
             clean_article = {
                 "title": entry.get("title", "No title provided"),
                 "published_parsed": published_time,
                 "link": link,
-                "summary": entry.get("summary", "No summary provided"),
-                "html_content": "No HTML content right now"
+                "summary": entry.get("summary", "No summary provided")
             }
 
             recent_articles.append(clean_article)
