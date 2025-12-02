@@ -1,8 +1,8 @@
 import feedparser
 import time
 from datetime import datetime, timedelta, timezone
-from htmlScraper import fetch_html
-
+from scraper import scrape_single_url
+from langdetect import detect, LangDetectException
 
 def parse_url(url, time_limit, verbose=False):
     recent_articles = []
@@ -16,6 +16,17 @@ def parse_url(url, time_limit, verbose=False):
         print(f"Failed to parse {url} due to {e}")
         return recent_articles
 
+    if news_feed.entries:
+        try:
+            first_entry = news_feed.entries[0]
+            check_text = f"{first_entry.get('title', '')}: {first_entry.get('summary', '')}"
+            if len(check_text) < 5 or detect(check_text) != "en":
+                print(f"Skipping non-english feed: {url}")
+                return []
+        except LangDetectException:
+            return []
+
+
     for entry in news_feed.entries:
         if not hasattr(entry, "published_parsed") or not entry.published_parsed:
             print(f"Ignoring this entry")
@@ -26,14 +37,21 @@ def parse_url(url, time_limit, verbose=False):
         )
     
         if published_time >= time_limit:
-            # html_content = fetch_html(article_link, verbose = verbose)
+            link = entry.get("link", "")
+
+            if link:
+                html_content = scrape_single_url(link)
+            else:
+                html_content = "No HTML content"
+
             clean_article = {
                 "title": entry.get("title", "No title provided"),
                 "published_parsed": published_time,
-                "link": entry.get("link", "No link provided"),
+                "link": link,
                 "summary": entry.get("summary", "No summary provided"),
-                #"html_content": html_content
+                "html_content": "No HTML content right now"
             }
+
             recent_articles.append(clean_article)
             if verbose:
                 print(f'Processed the article: "{entry.title}"!')

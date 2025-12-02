@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pprint import pprint
-from opml_parser import get_countries_with_opml
+from .opml_parser import get_countries_with_opml
 
 def parse_opml(url):
     response = requests.get(url)
@@ -50,6 +50,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
