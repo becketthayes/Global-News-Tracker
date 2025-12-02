@@ -3,13 +3,13 @@ import hdbscan
 import numpy as np
 
 def cluster_articles(articles):
-    corpus = [f"{a['title']} {a['summary']}" for a in articles]
+    corpus = [f"{a['title']} {a['html_content']['text']}" if a['html_content'] else f"{a['title']} {a['summary']}" for a in articles]
 
     vectorizer = TfidfVectorizer(stop_words="english", max_features=5000, max_df=0.8)
     tfidf = vectorizer.fit_transform(corpus)
 
     clusterer = hdbscan.HDBSCAN(
-        min_cluster_size=3,
+        min_cluster_size=5,
         metric="euclidean",
         cluster_selection_method="eom"
     )
