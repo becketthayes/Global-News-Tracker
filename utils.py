@@ -4,6 +4,10 @@ import os
 from supabase import create_client, Client
 from dotenv import load_dotenv
 load_dotenv()  # add this before os.environ.get(...)
+from datetime import datetime
+import zoneinfo
+
+pacific = zoneinfo.ZoneInfo("America/Los_Angeles")
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -45,8 +49,8 @@ def save_trends_to_supabase(trends_dict, trend_locations):
         if articles_arr:
             supabase.table("articles").insert(articles_arr).execute()
         
-    print("Database update complete!")
-
+    now = datetime.now(pacific)
+    print(f"Database update completed at {now.strftime('%Y-%m-%d %I:%M %p')} PT!")
 
 
 def save_articles_to_json(articles, filename="debug_articles.json"):
