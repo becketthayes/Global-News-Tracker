@@ -1,5 +1,53 @@
 import json
 from scraper import scrape_single_url
+import os
+from supabase import create_client, Client
+from dotenv import load_dotenv
+load_dotenv()  # add this before os.environ.get(...)
+
+url = os.environ.get("SUPABASE_URL")
+key = os.environ.get("SUPABASE_KEY")
+supabase: Client = create_client(url, key)
+
+def save_trends_to_supabase(trends_dict, trend_locations):
+    print("Pushing trends to the database")
+
+    for cluster_id, articles in trends_dict.items():
+        if cluster_id == -1:
+            continue
+
+        coords = trend_locations.get(cluster_id, {"lat": 0.0, "lng": 0.0})
+    
+        trend_data = {
+            "label": articles[0].get('title', 'Unknown Trend'),
+            "article_count": len(articles),
+            "lat": coords["lat"], # Placeholder until we pull UMAP coordinates out!
+            "lng": coords["lng"]  
+        }
+
+        trend_response = supabase.table("clusters").insert(trend_data).execute()
+
+        if not trend_response.data:
+            print(f"Failed to insert cluster {cluster_id}")
+            continue
+
+        new_cluster_id = trend_response.data[0]["id"]
+
+        articles_arr = []
+        for a in articles:
+            articles_arr.append({
+                "cluster_id": new_cluster_id,         # Link to the bubble we just created
+                "title": a.get('title', 'No Title'),
+                "url": a.get('link', ''),
+                "summary": a.get('summary', '')[:250] # Keep it short for the UI sidebar
+            })
+
+        if articles_arr:
+            supabase.table("articles").insert(articles_arr).execute()
+        
+    print("Database update complete!")
+
+
 
 def save_articles_to_json(articles, filename="debug_articles.json"):
     """
