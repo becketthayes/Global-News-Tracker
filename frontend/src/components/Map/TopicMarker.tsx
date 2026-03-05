@@ -16,8 +16,7 @@ export default function TopicMarker({ topic, position, articleCount, articles }:
   return (
     <CircleMarker 
       center={position} 
-      // Minimum radius of 15, scales up by 1.8x, strict max cap of 75 pixels
-      radius={Math.min(Math.max(15, articleCount * 1.8), 75)} 
+      radius={Math.min(Math.max(12, articleCount * 1.4), 61)} 
       pathOptions={{ color: '#ff4d4f', fillColor: '#ff4d4f', fillOpacity: 0.7 }}
     >
       <Popup minWidth={350}>
