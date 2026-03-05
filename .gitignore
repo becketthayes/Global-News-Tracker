@@ -4,4 +4,3 @@ venv/
 .DS_Store
 debug_articles.json
 .env
-*.png
