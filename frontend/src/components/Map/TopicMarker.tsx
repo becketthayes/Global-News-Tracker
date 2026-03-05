@@ -16,11 +16,11 @@ export default function TopicMarker({ topic, position, articleCount, articles }:
   return (
     <CircleMarker 
       center={position} 
-      radius={Math.max(10, articleCount * 1.5)} 
+      // Minimum radius of 15, scales up by 1.8x, strict max cap of 75 pixels
+      radius={Math.min(Math.max(15, articleCount * 1.8), 75)} 
       pathOptions={{ color: '#ff4d4f', fillColor: '#ff4d4f', fillOpacity: 0.7 }}
     >
       <Popup minWidth={350}>
-        { }
         <Card
           title={<div style={{ whiteSpace: 'normal', wordWrap: 'break-word', lineHeight: '1.4' }}>{topic}</div>}
           headStyle={{ minHeight: 'auto', padding: '12px' }}
