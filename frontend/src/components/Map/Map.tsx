@@ -6,10 +6,10 @@ export default function Map() {
     <>
       <MapContainer center={[0, 0]} zoom={2} scrollWheelZoom={false} style={{ height: '100vh', width: '100%' }}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
-        {/* Example topic marker usage */}
+        { }
         <TopicMarker
           topic="Topic 1"
           position={[51.505, -0.09]}
